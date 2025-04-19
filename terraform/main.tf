@@ -88,7 +88,7 @@ module "deploy" {
 
 # [[ Save kubeconfig ]]
 
-resource "null_resource" "kubeconfig" {
+resource "terraform_data" "kubeconfig" {
   depends_on = [module.deploy]
 
   provisioner "local-exec" {
@@ -101,7 +101,7 @@ resource "null_resource" "kubeconfig" {
 }
 
 data "local_sensitive_file" "kubeconfig" {
-  depends_on = [null_resource.kubeconfig]
+  depends_on = [terraform_data.kubeconfig]
   filename   = "${path.module}/../secrets/k3s.yaml"
 }
 
