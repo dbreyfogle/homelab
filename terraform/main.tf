@@ -68,7 +68,7 @@ locals {
 }
 
 module "deploy" {
-  source = "github.com/nix-community/nixos-anywhere//terraform/all-in-one"
+  source = "github.com/nix-community/nixos-anywhere//terraform/all-in-one?ref=1.9.0"
   count  = var.num_servers
 
   nixos_system_attr      = ".#nixosConfigurations.k3s-server.config.system.build.toplevel"
