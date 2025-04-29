@@ -1,9 +1,8 @@
 {
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-terraform.url = "github:stackbuilders/nixpkgs-terraform";
 
     nixos-generators.url = "github:nix-community/nixos-generators";
     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
@@ -16,16 +15,16 @@
     inputs@{
       flake-utils,
       nixpkgs,
-      nixpkgs-unstable,
+      nixpkgs-terraform,
       nixos-generators,
       ...
     }:
-    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-darwin" ] (
+    flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = import nixpkgs-unstable {
+        pkgs = import nixpkgs {
           inherit system;
-          config.allowUnfree = true;
+          overlays = [ nixpkgs-terraform.overlays.default ];
         };
       in
       {
@@ -36,7 +35,8 @@
             kubectl
             kubernetes-helm
             minikube
-            terraform
+            nixVersions.nix_2_24 # nixos-anywhere terraform special_args are broken for nix > 2.24
+            terraform-versions."1.11"
           ];
         };
       }

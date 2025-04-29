@@ -1,11 +1,14 @@
 # Nix build
 /result
 
+# Secrets
+/secrets
+
 # Environment variables
 .env
 
-# Secrets
-/secrets
+# Direnv
+.direnv/
 
 # Local .terraform directories
 **/.terraform/*
